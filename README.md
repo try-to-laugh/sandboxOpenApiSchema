@@ -52,7 +52,7 @@ where ```USERNAME``` - GitHub username, ```TOKEN``` - GitHub personal access tok
 * **Write** your openApi specification in ```src/main/resources/sandboxOpenApiSchema.yaml```
 * **Create** pull request  and wait for approval 
 
-When the pull request is approved, when you merge your pull request, GitHub Actions will publish the package automatically.
+When the pull request is approved, when you merge your pull request, GitHub Actions will generate interfaces and publish the package automatically.
  
 ## How to use package
 
@@ -65,3 +65,4 @@ When the pull request is approved, when you merge your pull request, GitHub Acti
   <version>0.0.1-SNAPSHOT</version>
 </dependency>
 ```
+

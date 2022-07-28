@@ -4,20 +4,67 @@ info:
   description: OpenAPI schema of budget application
   version: 0.1.9
 tags:
-  - name: hello world sample
+  - name: Wallet
+    description: All operations and actions with wallets
 paths:
-  /hello:
-    get:
-      summary: Returns a 'hello world' string.
+  /budget/wallet:
+    post:
       tags:
-        - hello world sample
-      description: Returns a 'hello world' string.
-      operationId: hello
+        - Wallet
+      summary: Create new wallet
+      description: Create new wallet. The first wallet must be set as a default automaticaly
+      operationId: addWallet
+      requestBody:
+        $ref: '#/components/requestBodies/CreateWalletBody'
       responses:
-        '200':
-          description: A list of user's wallets
+        '201':
+          description: New wallet successfully created
+        default:
+          description: Unexpected error
           content:
             application/json:
               schema:
-                type: string
-                example: hello world
+                $ref: '#/components/schemas/Error'
+              examples:
+                example-1:
+                  value:
+                    code: '401'
+                    message: 'Unauthorized'
+components:
+  schemas:
+    NewWallet:
+      type: object
+      properties:
+        name:
+          description: Name for new wallet
+          type: string
+          maxLength: 100
+          example: 'Salary wallet'
+        is_default:
+          description: Parameter that sets wallet as default
+          type: boolean
+          example: true
+        currency_id:
+          description: id of currency for wallet
+          type: integer
+          minimum: 1
+          example: 3
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+  requestBodies:
+    CreateWalletBody:
+      description: A JSON object wallet information for creation
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NewWallet'
+          examples:
+            example-1:
+              value:
+                name: 'Salary wallet'
+                is_default: true
+                currency_id: 3

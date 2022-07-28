@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: API for budget application
   description: OpenAPI schema of budget application
-  version: 0.1.9
+  version: 1.0.1
 tags:
   - name: hello world sample
 paths:
@@ -21,3 +21,256 @@ paths:
               schema:
                 type: string
                 example: hello world
+  /wallets:
+    
+    post:
+      security:
+        - bearerAuth: []
+      summary: Create new wallet
+      requestBody:
+        description: To create a user, you need to send an object in json format. If the operation is successful, Http status 201 and the id of the created wallet are returned
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/requestWallet'
+      tags: 
+        - Create new wallet
+      operationId: saveWalet
+      responses:
+        '201':
+          description: Returns the id of the created wallet and means the successful creation of a new wallet
+          content:
+            long:
+              schema:
+                type: integer
+                format: int64
+                example: 1
+        '4XX':
+          description: Bad Request(400), Unauthorized(401), Forbidden(403)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"              
+    get:
+      security:
+        - bearerAuth: []
+      summary: Returns an array of wallets as well as the recent 10 transactions 
+                owned by an authenticated user ( User must be authenticated )
+      tags: 
+        - Get all user's wallets
+      operationId: getAllWallets
+      responses:
+        '200':
+          description: Returns a json object with an array of wallets and recent transactions that means successful receipt of data
+          content:
+              application/json:
+                schema:
+                 $ref: "#/components/schemas/Wallets"
+        '400':
+          description: Bad Request, Check the correctness of the entered data
+          
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error" 
+        
+
+  /wallets/{walletId}:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Method for getting a wallet by id. Returns the user's wallet and recent transactions
+      tags: 
+        - Get wallet by id
+      operationId: getWalletById
+      parameters: 
+        - name: walletId
+          in: path
+          required: true
+          description: To receive a wallet, you need to send the wallet id as a url parameter
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Reterns wallet by id and current transactions 
+                      that means successful receipt of data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/responseWallet"
+        '4XX':
+          description: Bad Request(400), Unauthorized(401), Forbidden(403), Not Found(404) 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error" 
+    put:
+      security:
+        - bearerAuth: []
+      summary: Method for updating wallet data by id. Returns the updated user's wallet and recent transactions
+      tags: 
+        - Update wallet by id
+      operationId: updateWalletById
+      parameters: 
+        - name: walletId
+          in: path
+          required: true
+          description: To update wallet, you need to send the wallet id as a url parameter
+          schema:
+            type: integer
+      requestBody:
+        description: To update a user,  you need to send wallet object in json format with fields filled in (if the field was not updated, send the old data). If the operation is successful, Http status 201 and the id of the created wallet are returned
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/requestWallet'
+      responses:
+        '200':
+          description: Reterns updated wallet by id and current transactions 
+                      it means successful data update
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/responseWallet"
+        '4XX':
+          description: Bad Request(400), Unauthorized(401), Forbidden(403), Not Found(404)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"              
+    
+    delete:
+      security:
+        - bearerAuth: []
+      summary: Method for deliting wallet by id. Returns HttpStatus 204 with no content
+      tags: 
+        - Delete wallet by id
+      operationId: deleteWalletById
+      parameters: 
+        - name: walletId
+          in: path
+          required: true
+          description: To receive a wallet, you need to send the wallet id as a url parameter
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Returns http status "No content" which means successful deletion of the wallet
+        '4XX':
+          description: Bad Request(400), Unauthorized(401), Forbidden(403)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"     
+                
+components:
+  schemas:
+  
+    requestWallet:
+      type: object
+      required: 
+        - name
+        - isDefault
+        - currency
+      properties:  
+        name:
+          type: string
+          example: 'USD wallet'
+        isDefault:
+          type: boolean
+          example: false
+        currency:
+          type: string
+          example: 'USD'
+          
+    responseWallet:
+      type: object
+      required:
+        - id
+        - name
+        - isDefault
+        - currency
+        - balance
+        - transactions
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 4
+        name:
+          type: string
+          example: 'My USD card'
+        isDefault:
+          type: boolean
+          example: false
+        currency:
+          type: string
+          example: 'USD'
+        balance:
+          type: number
+          format: double
+          example: 3000,00
+        transactions: 
+          type: array
+          items:
+            $ref: "#/components/schemas/Transaction"
+    
+    Wallets:
+      type: array
+      items:
+        $ref: "#/components/schemas/responseWallet"
+    
+        
+    Transaction:
+      type: object
+      required: 
+        - id
+        - categoryName
+        - transactionType
+        - amount
+        - date
+        - walletName
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 112
+        categoryName:
+          type: string
+          example: 'Petrol'
+        transactionType:
+          type: string
+          example: 'EXPENCE'
+        amount :
+          type: integer
+          format: int64
+          example: 30,00
+        date:
+          type: string
+          format: date-time
+          example: '2022-17-07T15:15:15Z'
+        walletName:
+          type: string
+          example: 'USD wallet'
+          
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 4XX 
+        message:
+          type: string  
+          example: 'text describing the error' 
+          
+  securitySchemes:
+    bearerAuth:            
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  

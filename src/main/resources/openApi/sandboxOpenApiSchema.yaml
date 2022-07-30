@@ -3,8 +3,6 @@ info:
   title: API for budget application
   description: OpenAPI schema of budget application
   version: 1.0.1
-tags:
-  - name: hello world sample
 paths:
   /hello:
     get:
@@ -21,6 +19,7 @@ paths:
               schema:
                 type: string
                 example: hello world
+                
   /wallets:
     
     post:
@@ -33,22 +32,22 @@ paths:
             schema:
               $ref: '#/components/schemas/requestWallet'
       tags: 
-        - Create new wallet
+        - Wallet
       operationId: saveWalet
       responses:
         '204':
           description: Returns the HttpStatus 204 with no content that means successful creation of a new wallet
-        '4XX':
-          description: Bad Request(400), Unauthorized(401), Forbidden(403)
+        default:
+          description: Unexpected error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"              
+                $ref: "#/components/schemas/Error"             
     get:
       summary: Returns an array of wallets as well as the recent 10 transactions 
                 owned by an authenticated user ( User must be authenticated )
       tags: 
-        - Get all user's wallets
+        - Wallet
       operationId: getAllWallets
       responses:
         '200':
@@ -57,20 +56,19 @@ paths:
               application/json:
                 schema:
                  $ref: "#/components/schemas/Wallets"
-        '400':
-          description: Bad Request, Check the correctness of the entered data
-          
+        default:
+          description: Unexpected error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error" 
+                $ref: "#/components/schemas/Error"
         
 
   /wallets/{walletId}:
     get:
       summary: Method for getting a wallet by id. Returns the user's wallet and recent transactions
       tags: 
-        - Get wallet by id
+        - Wallet
       operationId: getWalletById
       parameters: 
         - name: walletId
@@ -87,8 +85,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/responseWallet"
-        '4XX':
-          description: Bad Request(400), Unauthorized(401), Forbidden(403), Not Found(404) 
+        default:
+          description: Unexpected error
           content:
             application/json:
               schema:
@@ -96,7 +94,7 @@ paths:
     put:
       summary: Method for updating wallet data by id. Returns the updated user's wallet and recent transactions
       tags: 
-        - Update wallet by id
+        - Wallet
       operationId: updateWalletById
       parameters: 
         - name: walletId
@@ -120,17 +118,17 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/responseWallet"
-        '4XX':
-          description: Bad Request(400), Unauthorized(401), Forbidden(403), Not Found(404)
+        default:
+          description: Unexpected error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"              
+                $ref: "#/components/schemas/Error"             
     
     delete:
       summary: Method for deliting wallet by id. Returns HttpStatus 204 with no content
       tags: 
-        - Delete wallet by id
+        - Wallet
       operationId: deleteWalletById
       parameters: 
         - name: walletId
@@ -142,12 +140,12 @@ paths:
       responses:
         '204':
           description: Returns http status "No content" which means successful deletion of the wallet
-        '4XX':
-          description: Bad Request(400), Unauthorized(401), Forbidden(403)
+        default:
+          description: Unexpected error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"     
+                $ref: "#/components/schemas/Error"    
                 
 components:
   schemas:

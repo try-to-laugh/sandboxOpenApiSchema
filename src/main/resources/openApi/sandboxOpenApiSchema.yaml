@@ -5,6 +5,7 @@ info:
   version: 0.1.9
 tags:
   - name: hello world sample
+  - name: Transactions
 paths:
   /hello:
     get:
@@ -21,3 +22,174 @@ paths:
               schema:
                 type: string
                 example: hello world
+  /user/tansactions/{species}:
+    get:
+      summary: Get all or any quantity tansactions
+      tags:
+        - Transactions
+      operationId: getTransactions
+      parameters:
+        - name: species
+          schema:
+            type: string
+            enum: [ all, inc, exp ]
+          in: path
+          description: You need choouse species of Transaction
+          required: true
+        - name: isAll
+          schema:
+            type: boolean
+          in: query
+          description: If true you give back all Transaction
+          required: true
+        - name: quantity
+          schema:
+            type: integer
+          in: query
+          description: Quantity last by date of transactions, which you want to give  back
+          required: true
+      responses:
+        200:
+          description: This means its ok!
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+        400:
+          description: REQUES
+    post:
+      summary: Create tansaction
+      tags:
+        - Transactions
+      operationId: addTransaction
+      parameters:
+        - name: species
+          schema:
+            type: string
+            enum: [ all, inc, exp ]
+          in: path
+          description: You need choouse species of Transaction
+          required: true
+      requestBody:
+        description: Data for create transaction
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        200:
+          description: This means its ok!
+          content:
+            application/json:
+              schema:
+                type: boolean
+        400:
+          description: REQUES
+    /user/tansactions/{transId}:
+      get:
+        summary: Get tansactions by ID
+        tags:
+          - Transactions
+        operationId: getTransactionById
+        parameters:
+          - name: transId
+            schema:
+              type: integer
+            in: path
+            description: ID of needed transaction
+            required: true
+        responses:
+          200:
+            description: This means its ok!
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Transaction'
+          400:
+            description: REQUES
+      put:
+        summary: Get tansactions by ID
+        tags:
+          - Transactions
+        operationId: updateTransactionById
+        parameters:
+          - name: transId
+            schema:
+              type: integer
+            in: path
+            description: ID of needed transaction
+            required: true
+        requestBody:
+          description: Data for uppdate transaction
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        responses:
+          200:
+            description: This means its ok!
+            content:
+              application/json:
+                schema:
+                  type: boolean
+          400:
+            description: REQUES
+      delete:
+        summary: Delete tansactions by ID
+        tags:
+          - Transactions
+        operationId: deleteTransactionById
+        parameters:
+          - name: transId
+            schema:
+              type: integer
+            in: path
+            description: ID of deleted transaction
+            required: true
+        responses:
+          200:
+            description: This means its ok!
+            content:
+              application/json:
+                schema:
+                  type: boolean
+          400:
+            description: REQUES
+components:
+  schemas:
+    Transaction:
+      description: This is  Transaction object
+      type: object
+      properties:
+        transId:
+          description: Transaction's ID
+          type: integer
+        species:
+          description: Transaction's type
+          type: string
+          enum: [all, inc, exp]
+        date:
+          description: Transaction's data
+          type: string
+        category:
+          description: Category of transactions
+          type: string
+        subcategory:
+          description: Need only for expense transactions
+          type: string
+        amount:
+          description: Transaction's amount
+          type: number
+        walletName:
+          description: The wallet in which the transaction is located
+          type: string
+        payer:
+          description:  Need only for expense transactions
+          type: string
+        Note:
+          description: Something about transacaction
+          type: string

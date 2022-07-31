@@ -9,17 +9,15 @@ paths:
   /api/users/{userId}:
 
     delete:
-      security:
-        - bearerAuth: []
       summary: All user data is deleted (wallets and transactions). User entity is NOT deleted from database
       tags:
-        - Delete User Data
+        - UserController
       operationId: deleteUserDataById
       parameters:
         - name: userId
           in: path
           required: true
-          description: User ID
+          description: User ID for data deletion
           schema:
             type: string
       responses:
@@ -32,7 +30,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: 'Your account is successfully deleted'
+                    example: 'Your account is succesfully deleted'
         default:
           description: Unexpected error
           content:
@@ -43,11 +41,9 @@ paths:
   /api/users/{userId}/logout:
 
     get:
-      security:
-        - bearerAuth: []
-      summary: User logout with JWT Auth de-activation
+      summary: List of the personal settings with values for the User
       tags:
-        - User Logout
+        - UserController
       operationId: logoutUserById
       parameters:
         - name: userId
@@ -66,7 +62,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: 'Logout is successful'
+                    example: 'Logout is succesfull'
         default:
           description: Unexpected error
           content:
@@ -77,11 +73,9 @@ paths:
   /api/users/{userId}/settings:
 
     get:
-      security:
-        - bearerAuth: []
-      summary: List of the personal User settings
+      summary: List of User settings
       tags:
-        - User Settings
+        - UserController
       operationId: userSettingsByUserId
       parameters:
         - name: userId
@@ -138,3 +132,6 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+
+security:
+  - bearerAuth: []

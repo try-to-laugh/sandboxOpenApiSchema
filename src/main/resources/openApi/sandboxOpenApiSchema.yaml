@@ -123,8 +123,8 @@ components:
         language:
           type: string
           example: 'English'
-        message:
-          type: boolean
+        ui_theme:
+          type: string
           example: 'Dark UI theme'
 
   securitySchemes:

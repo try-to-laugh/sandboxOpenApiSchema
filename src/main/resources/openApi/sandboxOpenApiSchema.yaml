@@ -6,12 +6,12 @@ info:
 tags:
   - name: User Management
 paths:
-  /api/users/login:
+  /users/login:
     post:
       summary: LogIn
       tags:
         - User Management
-      operationId: post-api-authentication-login
+      operationId: login
       responses:
         '200':
           description: OK

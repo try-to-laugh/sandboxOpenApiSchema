@@ -5,7 +5,7 @@ info:
   version: 0.1.9
 tags:
   - name: hello world sample
-  - name: Transactions
+  - name: UserTransactions
 paths:
   /hello:
     get:
@@ -22,11 +22,11 @@ paths:
               schema:
                 type: string
                 example: hello world
-  /user/tansactions/{species}:
+  /transactions/{species}:
     get:
       summary: Get all or any quantity tansactions
       tags:
-        - Transactions
+        - UserTransactions
       operationId: getTransactions
       parameters:
         - name: species
@@ -62,7 +62,7 @@ paths:
     post:
       summary: Create tansaction
       tags:
-        - Transactions
+        - UserTransactions
       operationId: addTransaction
       parameters:
         - name: species
@@ -81,91 +81,91 @@ paths:
               $ref: '#/components/schemas/Transaction'
       responses:
         200:
-          description: This means its ok!
+          description: Operation completed without errors and expected response received from server
           content:
             application/json:
               schema:
                 type: boolean
         400:
           description: REQUES
-    /user/tansactions/{transId}:
-      get:
-        summary: Get tansactions by ID
-        tags:
-          - Transactions
-        operationId: getTransactionById
-        parameters:
-          - name: transId
-            schema:
-              type: integer
-            in: path
-            description: ID of needed transaction
-            required: true
-        responses:
-          200:
-            description: This means its ok!
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Transaction'
-          400:
-            description: REQUES
-      put:
-        summary: Get tansactions by ID
-        tags:
-          - Transactions
-        operationId: updateTransactionById
-        parameters:
-          - name: transId
-            schema:
-              type: integer
-            in: path
-            description: ID of needed transaction
-            required: true
-        requestBody:
-          description: Data for uppdate transaction
+  /transactions/{transactionId}:
+    get:
+      summary: Get tansactions by ID
+      tags:
+        - UserTransactions
+      operationId: getTransactionById
+      parameters:
+        - name: transactionId
+          schema:
+            type: integer
+          in: path
+          description: ID of needed transaction
           required: true
+      responses:
+        200:
+          description: Operation completed without errors and expected response received from server
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Transaction'
-        responses:
-          200:
-            description: This means its ok!
-            content:
-              application/json:
-                schema:
-                  type: boolean
-          400:
-            description: REQUES
-      delete:
-        summary: Delete tansactions by ID
-        tags:
-          - Transactions
-        operationId: deleteTransactionById
-        parameters:
-          - name: transId
+        400:
+          description: REQUES
+    put:
+      summary: Get tansactions by ID
+      tags:
+        - UserTransactions
+      operationId: updateTransactionById
+      parameters:
+        - name: transactionId
+          schema:
+            type: integer
+          in: path
+          description: ID of needed transaction
+          required: true
+      requestBody:
+        description: Data for uppdate transaction
+        required: true
+        content:
+          application/json:
             schema:
-              type: integer
-            in: path
-            description: ID of deleted transaction
-            required: true
-        responses:
-          200:
-            description: This means its ok!
-            content:
-              application/json:
-                schema:
-                  type: boolean
-          400:
-            description: REQUES
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        200:
+          description: Operation completed without errors and expected response received from server
+          content:
+            application/json:
+              schema:
+                type: boolean
+        400:
+          description: REQUES
+    delete:
+      summary: Delete tansactions by ID
+      tags:
+        - UserTransactions
+      operationId: deleteTransactionById
+      parameters:
+        - name: transactionId
+          schema:
+            type: integer
+          in: path
+          description: ID of deleted transaction
+          required: true
+      responses:
+        200:
+          description: Operation completed without errors and expected response received from server
+          content:
+            application/json:
+              schema:
+                type: boolean
+        400:
+          description: REQUES
 components:
   schemas:
     Transaction:
       description: This is  Transaction object
       type: object
       properties:
-        transId:
+        transactionId:
           description: Transaction's ID
           type: integer
         species:

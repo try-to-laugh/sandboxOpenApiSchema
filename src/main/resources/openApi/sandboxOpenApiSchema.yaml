@@ -1,26 +1,42 @@
 openapi: 3.0.0
 info:
-  title: API for budget application
+  title: API for Exadel budget application
   description: OpenAPI schema of budget application
-  version: 1.0.1
+  version: 1.0.0
+tags:
+  - name: User Management
 paths:
-  /hello:
-    get:
-      summary: Returns a 'hello world' string.
+  /users/login:
+    post:
+      summary: LogIn
       tags:
-        - hello world sample
-      description: Returns a 'hello world' string.
-      operationId: hello
+        - User Management
+      operationId: login
       responses:
         '200':
-          description: A list of user's wallets
+          description: OK
+          headers:
+            Authorization:
+              schema:
+                type: string
+              description: JWT Authorization header using the Bearer scheme
+        '401':
+          description: Invalid Email or Password
+        default:
           content:
             application/json:
               schema:
-                type: string
-                example: hello world
-                
-  /api/wallets:
+                $ref: '#/components/schemas/Error'
+          description: template for error reporting
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLoginDto'
+      description: As a User I want to to have a login functionality so that I can get an access to my User account
+      security: [ ]
+
+  /wallets:
     
     post:
       summary: Create new wallet
@@ -64,7 +80,7 @@ paths:
                 $ref: "#/components/schemas/Error"
         
 
-  /api/wallets/{walletId}:
+  /wallets/{walletId}:
     get:
       summary: Method for getting a wallet by id. Returns the user's wallet and recent transactions
       tags: 
@@ -146,10 +162,39 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"    
-                
+
+
 components:
   schemas:
-  
+    UserLoginDto:
+      type: object
+      x-examples:
+        example-1:
+          username: user@exadel.com
+          password: User
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+        - username
+        - password
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+      required:
+        - code
+        - message
+      x-examples:
+        example-1:
+          code: 404
+          message: Not found
     walletReqDto:
       type: object
       required: 
@@ -290,27 +335,14 @@ components:
         parentCategory:
             $ref: "#/components/schemas/category"
             example: "object with parent categoy"
-        
-          
-    Error:
-      type: object
-      required:
-        - code
-        - message
-      properties:
-        code:
-          type: integer
-          format: int32
-          example: 4XX 
-        message:
-          type: string  
-          example: 'text describing the error' 
-          
+  
   securitySchemes:
-    bearerAuth:            
+    bearerAuth:
       type: http
       scheme: bearer
-      bearerFormat: JWT  
+      description: JWT Authorization header using the Bearer scheme
+  
+
 
 security:
   - bearerAuth: []

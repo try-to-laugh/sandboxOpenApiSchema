@@ -9,9 +9,17 @@ paths:
   /users/login:
     post:
       summary: LogIn
+      description: As a User I want to to have a login functionality so that I can get an access to my User account
       tags:
         - User Management
       operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLoginDto'
+        description: DTO for User entity
+        required: true
       responses:
         '200':
           description: OK
@@ -19,31 +27,20 @@ paths:
             Authorization:
               schema:
                 type: string
+                example: Bearer 123
               description: JWT Authorization header using the Bearer scheme
         '401':
           description: Invalid Email or Password
-        default:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-          description: template for error reporting
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserLoginDto'
-      description: As a User I want to to have a login functionality so that I can get an access to my User account
-      security: [ ]
-
+                type: string
+                example: Invalid Email or Password
+      security: []
 components:
   schemas:
     UserLoginDto:
       type: object
-      x-examples:
-        example-1:
-          username: user@exadel.com
-          password: User
       properties:
         username:
           type: string
@@ -52,26 +49,14 @@ components:
       required:
         - username
         - password
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-      required:
-        - code
-        - message
       x-examples:
         example-1:
-          code: 404
-          message: Not found
+          username: user@exadel.com
+          password: User
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       description: JWT Authorization header using the Bearer scheme
-
 security:
   - bearerAuth: []

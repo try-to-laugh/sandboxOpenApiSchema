@@ -22,7 +22,7 @@ paths:
         required: true
       responses:
         '204':
-          description: OK
+          description: Successful authentication
           headers:
             Authorization:
               schema:
@@ -41,8 +41,15 @@ paths:
     
     post:
       summary: Create new wallet
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+            example: Bearer 123
+          required: true
       requestBody:
-        description: To create a user, you need to send an object in json format. If the operation is successful, Http status 204 returned
+        description: To create a user, you need to send an object in json format. If the operation is successful, Http status 201 and id returned
         required: true
         content:
           application/json:
@@ -69,17 +76,26 @@ paths:
         '500':
           $ref: "#/components/responses/Error"
     get:
-      summary: Returns an array of wallets as well as the recent 10 transactions owned by an authenticated user
+      summary: Returns an array of wallets owned by an authenticated user
       tags:
         - WalletController
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+            example: Bearer 123
+          required: true
       operationId: getAllWallets
       responses:
         '200':
-          description: Returns a json object with an array of wallets and recent transactions that means successful receipt of data
+          description: Returns a json object with an array of wallets that means successful receipt of data
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/WalletsDto"
+                type: array
+                items:
+                  $ref: "#/components/schemas/WalletResponseDto"
         '401':
           $ref: "#/components/responses/Error"
         '404':
@@ -98,6 +114,12 @@ paths:
         - WalletController
       operationId: getWalletById
       parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+            example: Bearer 123
+          required: true
         - name: walletId
           in: path
           required: true
@@ -107,8 +129,7 @@ paths:
             format: int64
       responses:
         '200':
-          description: Returns wallet by id and current transactions
-            that means successful receipt of data
+          description: Returns wallet by id that means successful receipt of data
           content:
             application/json:
               schema:
@@ -125,11 +146,17 @@ paths:
           $ref: "#/components/responses/Error"
 
     put:
-      summary: Method for updating wallet data by id. Returns the updated user's wallet and recent transactions
+      summary: Method for updating wallet data by id. Returns the updated user's wallet
       tags:
         - WalletController
       operationId: updateWalletById
       parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+            example: Bearer 123
+          required: true
         - name: walletId
           in: path
           required: true
@@ -138,7 +165,7 @@ paths:
             type: integer
             format: int64
       requestBody:
-        description: To update a user,  you need to send wallet object in json format with fields filled in (if the field was not updated, send the old data). If the operation is successful, Http status 201 and the id of the created wallet are returned
+        description: To update a user,  you need to send wallet object in json format with fields filled in (if the field was not updated, send the old data). If the operation is successful, Http status 200 and the id of the created wallet are returned
         required: true
         content:
           application/json:
@@ -169,6 +196,12 @@ paths:
         - WalletController
       operationId: deleteWalletById
       parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+            example: Bearer 123
+          required: true
         - name: walletId
           in: path
           required: true
@@ -259,16 +292,6 @@ components:
         balance:
           type: string
           example: '3000,00'
-
-    WalletsDto:
-      type: object
-      required:
-        - wallets
-      properties:
-        wallets:
-          type: array
-          items:
-            $ref: "#/components/schemas/WalletResponseDto"
 
   securitySchemes:
     bearerAuth:

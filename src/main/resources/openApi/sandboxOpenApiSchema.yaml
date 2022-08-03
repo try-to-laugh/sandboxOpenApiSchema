@@ -153,6 +153,10 @@ components:
         example-1:
           username: user@exadel.com
           password: User
+                example: Invalid Email or Password
+      security: []
+components:
+  schemas:
     UserLoginDto:
       type: object
       properties:
@@ -174,4 +178,3 @@ components:
       description: JWT Authorization header using the Bearer scheme
 security:
   - bearerAuth: []
-

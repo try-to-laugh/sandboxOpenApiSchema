@@ -5,6 +5,7 @@ info:
   version: 1.0.0
 tags:
   - name: User Management
+  - name: WalletController
 paths:
   /users/login:
     post:
@@ -29,27 +30,19 @@ paths:
                 type: string
                 example: Bearer 123
               description: JWT Authorization header using the Bearer scheme
-        '401':
-          $ref: "#/components/responses/Error"
         '400':
-          $ref: "#/components/responses/Error"
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
         '500':
-          $ref: "#/components/responses/Error"
+          $ref: '#/components/responses/Error'
       security: []
-
   /wallets:
-    
     post:
       summary: Create new wallet
-      parameters:
-        - name: Authorization
-          in: header
-          schema:
-            type: string
-            example: Bearer 123
-          required: true
+      description: To create a new wallet, a json object must be sent in the request.
       requestBody:
-        description: To create a user, you need to send an object in json format. If the operation is successful, Http status 201 and id returned
+        description: 'To create a user, you need to send an object in json format. If the operation is successful, Http status 201 and id returned'
         required: true
         content:
           application/json:
@@ -67,25 +60,19 @@ paths:
                 type: integer
                 format: int64
                 example: 1
-        '401':
-          $ref: "#/components/responses/Error"
-        '403':
-          $ref: "#/components/responses/Error"
         '400':
-          $ref: "#/components/responses/Error"
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
         '500':
-          $ref: "#/components/responses/Error"
+          $ref: '#/components/responses/Error'
     get:
-      summary: Returns an array of wallets owned by an authenticated user
+      summary: Get all wallets
+      description: Returns an array of wallets owned by an authenticated user
       tags:
         - WalletController
-      parameters:
-        - name: Authorization
-          in: header
-          schema:
-            type: string
-            example: Bearer 123
-          required: true
       operationId: getAllWallets
       responses:
         '200':
@@ -95,35 +82,29 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/WalletResponseDto"
-        '401':
-          $ref: "#/components/responses/Error"
-        '404':
-          $ref: "#/components/responses/Error"
-        '403':
-          $ref: "#/components/responses/Error"
+                  $ref: '#/components/schemas/WalletResponseDto'
         '400':
-          $ref: "#/components/responses/Error"
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
         '500':
-          $ref: "#/components/responses/Error"
-
-  /wallets/{walletId}:
+          $ref: '#/components/responses/Error'
+  '/wallets/{walletId}':
     get:
-      summary: Method for getting a wallet by id. Returns the user's wallet and recent transactions
+      summary: Get wallet by Id
+      description: Method for getting a wallet by id. Returns the user's wallet and recent transactions
       tags:
         - WalletController
       operationId: getWalletById
       parameters:
-        - name: Authorization
-          in: header
-          schema:
-            type: string
-            example: Bearer 123
-          required: true
         - name: walletId
           in: path
           required: true
-          description: To receive a wallet, you need to send the wallet id as a url parameter
+          description: 'To receive a wallet, you need to send the wallet id as a url parameter'
           schema:
             type: integer
             format: int64
@@ -133,39 +114,33 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/WalletResponseDto"
-        '401':
-          $ref: "#/components/responses/Error"
-        '404':
-          $ref: "#/components/responses/Error"
-        '403':
-          $ref: "#/components/responses/Error"
+                $ref: '#/components/schemas/WalletResponseDto'
         '400':
-          $ref: "#/components/responses/Error"
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
         '500':
-          $ref: "#/components/responses/Error"
-
+          $ref: '#/components/responses/Error'
     put:
-      summary: Method for updating wallet data by id. Returns the updated user's wallet
+      summary: Update wallet by Id
+      description: To update the wallet, you need to send a json object. Returns the updated user's wallet
       tags:
         - WalletController
       operationId: updateWalletById
       parameters:
-        - name: Authorization
-          in: header
-          schema:
-            type: string
-            example: Bearer 123
-          required: true
         - name: walletId
           in: path
           required: true
-          description: To update wallet, you need to send the wallet id as a url parameter
+          description: 'To update wallet, you need to send the wallet id as a url parameter'
           schema:
             type: integer
             format: int64
       requestBody:
-        description: To update a user,  you need to send wallet object in json format with fields filled in (if the field was not updated, send the old data). If the operation is successful, Http status 200 and the id of the created wallet are returned
+        description: 'To update a user,  you need to send wallet object in json format with fields filled in (if the field was not updated, send the old data). If the operation is successful, Http status 200 and the id of the created wallet are returned'
         required: true
         content:
           application/json:
@@ -173,58 +148,49 @@ paths:
               $ref: '#/components/schemas/WalletRequestDto'
       responses:
         '200':
-          description: Returns updated wallet by id and current transactions
-            it means successful data update
+          description: Returns updated wallet by id and current transactions it means successful data update
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/WalletResponseDto"
-        '401':
-          $ref: "#/components/responses/Error"
-        '404':
-          $ref: "#/components/responses/Error"
-        '403':
-          $ref: "#/components/responses/Error"
+                $ref: '#/components/schemas/WalletResponseDto'
         '400':
-          $ref: "#/components/responses/Error"
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
         '500':
-          $ref: "#/components/responses/Error"
-
+          $ref: '#/components/responses/Error'
     delete:
-      summary: Method for deleting wallet by id. Returns HttpStatus 204 with no content
+      summary: Delete by Id
+      description: Method for deleting wallet by id. Returns HttpStatus 204 with no content
       tags:
         - WalletController
       operationId: deleteWalletById
       parameters:
-        - name: Authorization
-          in: header
-          schema:
-            type: string
-            example: Bearer 123
-          required: true
         - name: walletId
           in: path
           required: true
-          description: To receive a wallet, you need to send the wallet id as a url parameter
+          description: 'To receive a wallet, you need to send the wallet id as a url parameter'
           schema:
             type: integer
             format: int64
       responses:
         '204':
           description: Returns http status "No content" which means successful deletion of the wallet
-        '401':
-          $ref: "#/components/responses/Error"
-        '404':
-          $ref: "#/components/responses/Error"
-        '403':
-          $ref: "#/components/responses/Error"
         '400':
-          $ref: "#/components/responses/Error"
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
         '500':
-          $ref: "#/components/responses/Error"
-
+          $ref: '#/components/responses/Error'
 components:
-
   responses:
     Error:
       description: generic error return body template
@@ -232,8 +198,7 @@ components:
         application/json:
           schema:
             type: string
-            example: 'User not authenticated'
-
+            example: User not authenticated
   schemas:
     UserLoginDto:
       type: object
@@ -249,7 +214,6 @@ components:
         example-1:
           username: user@exadel.com
           password: User
-
     WalletRequestDto:
       type: object
       required:
@@ -259,14 +223,13 @@ components:
       properties:
         name:
           type: string
-          example: 'USD wallet'
+          example: USD wallet
         isDefault:
           type: boolean
           example: false
         currency:
           type: string
-          example: 'USD'
-
+          example: USD
     WalletResponseDto:
       type: object
       required:
@@ -282,17 +245,16 @@ components:
           example: 4
         name:
           type: string
-          example: 'My USD card'
+          example: My USD card
         isDefault:
           type: boolean
           example: false
         currency:
           type: string
-          example: 'USD'
+          example: USD
         balance:
           type: string
           example: '3000,00'
-
   securitySchemes:
     bearerAuth:
       type: http

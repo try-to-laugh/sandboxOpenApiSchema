@@ -1,17 +1,115 @@
-openapi: 3.0.1
+openapi: 3.0.0
 info:
-  title: Finance manager API
+  title: API for Exadel budget application
   description: OpenAPI schema of budget application
   version: 1.0.0
-
+tags:
+  - name: User Management
 paths:
+  /users/login:
+    post:
+      summary: LogIn
+      description: As a User I want to to have a login functionality so that I can get an access to my User account
+      tags:
+        - User Management
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLoginDto'
+        description: DTO for User entity
+        required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Authorization:
+              schema:
+                type: string
+                example: Bearer 123
+              description: JWT Authorization header using the Bearer scheme
+        '401':
+          description: Invalid Email or Password
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Invalid Email or Password
+      security: []
 
-  /api/users/{userId}:
+  /users/logout:
+    get:
+      summary: Logout of the user with JWT de-activation
+      tags:
+        - User Management
+      operationId: userLogout
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Logout is succesfull
+        '500':
+          description: Internal server error, could not process logout
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error, please try again
 
+  /users/{userId}:
+    get:
+      summary: Fetch User information by userId
+      tags:
+        - User Management
+      operationId: userGet
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: User ID for data deletion
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponseDto"
+        '403':
+          description: Unauthorized to access current resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: You are not allowed to view current page, please contact system administrator
+        '500':
+          description: Internal server error, could not process request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error, please try again
     delete:
       summary: All user data is deleted (wallets and transactions). User entity is NOT deleted from database
       tags:
-        - UserController
+        - User Management
       operationId: deleteUserDataById
       parameters:
         - name: userId
@@ -21,7 +119,7 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        '200':
           description: Expected response to a valid request
           content:
             application/json:
@@ -30,108 +128,49 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: 'Your account is succesfully deleted'
-        default:
-          description: Unexpected error
+                    example: Your account is succesfully deleted
+        '204':
+          description: Content (user) not found in databse
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-
-  /api/users/{userId}/logout:
-
-    get:
-      summary: List of the personal settings with values for the User
-      tags:
-        - UserController
-      operationId: logoutUserById
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          description: User ID
-          schema:
-            type: string
-      responses:
-        200:
-          description: Expected response to a valid request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: 'Logout is succesfull'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-  /api/users/{userId}/settings:
-
-    get:
-      summary: List of User settings
-      tags:
-        - UserController
-      operationId: userSettingsByUserId
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          description: User ID
-          schema:
-            type: string
-      responses:
-        200:
-          description: Expected response to a valid request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/SettingsDto"
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+                type: string
+                example: No such user found in database
+      security: []
 
 components:
   schemas:
-    Error:
+    UserResponseDto:
       type: object
-      required:
-        - code
-        - message
       properties:
-        code:
-          type: integer
-          format: int32
-          example: 4XX
-        message:
+        username:
           type: string
-          example: 'text describing the error'
-
-    SettingsDto:
+        walletDto:
+          type: array
+          items:
+            type: string
+      x-examples:
+        example-1:
+          username: user@exadel.com
+          password: User
+    UserLoginDto:
       type: object
-      required:
-        - language
-        - ui_theme
       properties:
-        language:
+        username:
           type: string
-          example: 'English'
-        ui_theme:
+        password:
           type: string
-          example: 'Dark UI theme'
-
+      required:
+        - username
+        - password
+      x-examples:
+        example-1:
+          username: user@exadel.com
+          password: User
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
-      bearerFormat: JWT
-
+      description: JWT Authorization header using the Bearer scheme
 security:
   - bearerAuth: []

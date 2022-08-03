@@ -1,10 +1,11 @@
 openapi: 3.0.0
 info:
-  title: API for Exadel budget application
+  title: API for budget application
   description: OpenAPI schema of budget application
   version: 1.0.0
 tags:
   - name: User Management
+  - name: WalletController
 paths:
   /users/login:
     post:
@@ -21,23 +22,183 @@ paths:
         description: DTO for User entity
         required: true
       responses:
-        '200':
-          description: OK
+        '204':
+          description: Successful authentication
           headers:
             Authorization:
               schema:
                 type: string
                 example: Bearer 123
               description: JWT Authorization header using the Bearer scheme
+        '400':
+          $ref: '#/components/responses/Error'
         '401':
-          description: Invalid Email or Password
+          $ref: '#/components/responses/Error'
+        '500':
+          $ref: '#/components/responses/Error'
+      security: []
+  /wallets:
+    post:
+      summary: Create new wallet
+      description: To create a new wallet, a json object must be sent in the request.
+      requestBody:
+        description: 'To create a user, you need to send an object in json format. If the operation is successful, Http status 201 and id returned'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletRequestDto'
+      tags:
+        - WalletController
+      operationId: createWallet
+      responses:
+        '201':
+          description: Returns the HttpStatus 201 and id of the created wallet and means the successful creation of a new wallet
+          content:
+            long:
+              schema:
+                type: integer
+                format: int64
+                example: 1
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '500':
+          $ref: '#/components/responses/Error'
+    get:
+      summary: Get all wallets
+      description: Returns an array of wallets owned by an authenticated user
+      tags:
+        - WalletController
+      operationId: getAllWallets
+      responses:
+        '200':
+          description: Returns a json object with an array of wallets that means successful receipt of data
           content:
             application/json:
               schema:
-                type: string
-                example: Invalid Email or Password
-      security: []
+                type: array
+                items:
+                  $ref: '#/components/schemas/WalletResponseDto'
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '500':
+          $ref: '#/components/responses/Error'
+  '/wallets/{walletId}':
+    get:
+      summary: Get wallet by Id
+      description: Method for getting a wallet by id. Returns the user's wallet and recent transactions
+      tags:
+        - WalletController
+      operationId: getWalletById
+      parameters:
+        - name: walletId
+          in: path
+          required: true
+          description: 'To receive a wallet, you need to send the wallet id as a url parameter'
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Returns wallet by id that means successful receipt of data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletResponseDto'
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '500':
+          $ref: '#/components/responses/Error'
+    put:
+      summary: Update wallet by Id
+      description: To update the wallet, you need to send a json object. Returns the updated user's wallet
+      tags:
+        - WalletController
+      operationId: updateWalletById
+      parameters:
+        - name: walletId
+          in: path
+          required: true
+          description: 'To update wallet, you need to send the wallet id as a url parameter'
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: 'To update a user,  you need to send wallet object in json format with fields filled in (if the field was not updated, send the old data). If the operation is successful, Http status 200 and the id of the created wallet are returned'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletRequestDto'
+      responses:
+        '200':
+          description: Returns updated wallet by id and current transactions it means successful data update
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletResponseDto'
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '500':
+          $ref: '#/components/responses/Error'
+    delete:
+      summary: Delete by Id
+      description: Method for deleting wallet by id. Returns HttpStatus 204 with no content
+      tags:
+        - WalletController
+      operationId: deleteWalletById
+      parameters:
+        - name: walletId
+          in: path
+          required: true
+          description: 'To receive a wallet, you need to send the wallet id as a url parameter'
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Returns http status "No content" which means successful deletion of the wallet
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '500':
+          $ref: '#/components/responses/Error'
 components:
+  responses:
+    Error:
+      description: generic error return body template
+      content:
+        application/json:
+          schema:
+            type: string
+            example: User not authenticated
   schemas:
     UserLoginDto:
       type: object
@@ -53,6 +214,47 @@ components:
         example-1:
           username: user@exadel.com
           password: User
+    WalletRequestDto:
+      type: object
+      required:
+        - name
+        - default
+        - currency
+      properties:
+        name:
+          type: string
+          example: USD wallet
+        isDefault:
+          type: boolean
+          example: false
+        currency:
+          type: string
+          example: USD
+    WalletResponseDto:
+      type: object
+      required:
+        - id
+        - name
+        - default
+        - currency
+        - balance
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 4
+        name:
+          type: string
+          example: My USD card
+        isDefault:
+          type: boolean
+          example: false
+        currency:
+          type: string
+          example: USD
+        balance:
+          type: string
+          example: '3000,00'
   securitySchemes:
     bearerAuth:
       type: http

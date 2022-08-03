@@ -53,7 +53,7 @@ paths:
         - WalletControler
       operationId: saveWalet
       responses:
-        '204':
+        '201':
           description: Returns the HttpStatus 204 with no content that means successful creation of a new wallet
         '401':
           $ref: "#/components/responses/UnauthorizedError"    
@@ -152,7 +152,7 @@ components:
 
   responses:
     UnauthorizedError:
-      description: Invalid Email or Password
+      description: We get this error if the user is not authenticated.
       content:
         application/json:
           schema:

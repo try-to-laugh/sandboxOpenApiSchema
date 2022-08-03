@@ -174,3 +174,4 @@ components:
       description: JWT Authorization header using the Bearer scheme
 security:
   - bearerAuth: []
+

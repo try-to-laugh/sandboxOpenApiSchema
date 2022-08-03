@@ -224,7 +224,7 @@ components:
         name:
           type: string
           example: USD wallet
-        isDefault:
+        default:
           type: boolean
           example: false
         currency:
@@ -246,7 +246,7 @@ components:
         name:
           type: string
           example: My USD card
-        isDefault:
+        default:
           type: boolean
           example: false
         currency:

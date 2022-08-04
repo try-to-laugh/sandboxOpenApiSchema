@@ -37,7 +37,91 @@ paths:
         '500':
           $ref: '#/components/responses/Error'
       security: []
-  /wallets:
+
+  /users/logout:
+    get:
+      summary: User logout with JWT de-activation
+      description: One user decides to exit the system, any authentication shall be de-activated
+      tags:
+        - User Management
+      operationId: logout
+      responses:
+        '200':
+          description: Successful logout (including invalid JWT token in HTTP Header)
+          headers:
+            Authorization:
+              schema:
+                type: string
+                example: Bearer 123
+              description: INVALID JWT Authorization header using the Bearer scheme forcing next request to reroute to login page
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '500':
+          $ref: '#/components/responses/Error'
+
+  /users/{userId}:
+    get:
+      summary: Get User by Id
+      description: Method for getting a user by id. Returns the user's data
+      tags:
+        - User Management
+      operationId: getUserById
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: 'User ID is required to obtain User data'
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Returns user by id that means successful receipt of data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponseDto'
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '500':
+          $ref: '#/components/responses/Error'
+    delete:
+      summary: Delete User by Id
+      description: Method for deleting User data by id. User entity is NOT deleted, only user data.
+      tags:
+        - User Management
+      operationId: deleteUserById
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: 'User ID is required to delete User data'
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Returns http status "No content" which means successful deletion of the user data
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '500':
+          $ref: '#/components/responses/Error'
+
+ /wallets:
     post:
       summary: Create new wallet
       description: To create a new wallet, a json object must be sent in the request.
@@ -93,7 +177,7 @@ paths:
           $ref: '#/components/responses/Error'
         '500':
           $ref: '#/components/responses/Error'
-  '/wallets/{walletId}':
+  /wallets/{walletId}:
     get:
       summary: Get wallet by Id
       description: Method for getting a wallet by id. Returns the user's wallet and recent transactions
@@ -173,7 +257,7 @@ paths:
         - name: walletId
           in: path
           required: true
-          description: 'To receive a wallet, you need to send the wallet id as a url parameter'
+          description: 'To delete a wallet, you need to send the wallet id as a url parameter'
           schema:
             type: integer
             format: int64
@@ -200,6 +284,7 @@ components:
             type: string
             example: User not authenticated
   schemas:
+
     UserLoginDto:
       type: object
       properties:
@@ -213,7 +298,17 @@ components:
       x-examples:
         example-1:
           username: user@exadel.com
-          password: User
+          password: User1234
+
+    UserResponseDto:
+      type: object
+      properties:
+        username:
+          type: string
+      x-examples:
+        example-1:
+          username: user@exadel.com
+
     WalletRequestDto:
       type: object
       required:
@@ -260,5 +355,6 @@ components:
       type: http
       scheme: bearer
       description: JWT Authorization header using the Bearer scheme
+
 security:
   - bearerAuth: []

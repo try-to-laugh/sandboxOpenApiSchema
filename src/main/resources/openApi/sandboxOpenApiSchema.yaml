@@ -359,7 +359,7 @@ components:
       x-examples:
         example-1:
           username: user@exadel.com
-          password: User1234
+
     WalletRequestDto:
       type: object
       required:

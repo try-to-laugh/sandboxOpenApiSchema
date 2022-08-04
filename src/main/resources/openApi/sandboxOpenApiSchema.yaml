@@ -60,7 +60,6 @@ paths:
           $ref: '#/components/responses/Error'
         '500':
           $ref: '#/components/responses/Error'
-      security: [ ]
 
   /users/{userId}:
     get:
@@ -122,55 +121,7 @@ paths:
         '500':
           $ref: '#/components/responses/Error'
 
-  /wallets:
-    post:
-      summary: Create new wallet
-      description: To create a new wallet, a json object must be sent in the request.
-      requestBody:
-        description: 'To create a user, you need to send an object in json format. If the operation is successful, Http status 201 and id returned'
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/WalletRequestDto'
-      tags:
-        - WalletController
-      operationId: createWallet
-      responses:
-        '201':
-          description: Returns the HttpStatus 201 and id of the created wallet and means the successful creation of a new wallet
-          content:
-            long:
-              schema:
-                type: integer
-                format: int64
-                example: 1
-        '400':
-          $ref: '#/components/responses/Error'
-        '401':
-          $ref: '#/components/responses/Error'
-        '403':
-          $ref: '#/components/responses/Error'
-        '500':
-          $ref: '#/components/responses/Error'
-    get:
-      summary: Get all wallets
-      description: Returns an array of wallets owned by an authenticated user
-      tags:
-        - WalletController
-      operationId: getAllWallets
-      responses:
-        '200':
-          description: Returns a json object with an array of wallets that means successful receipt of data
-          content:
-            application/json:
-              schema:
-        '401':
-          $ref: '#/components/responses/Error'
-        '500':
-          $ref: '#/components/responses/Error'
-      security: []
-  /wallets:
+ /wallets:
     post:
       summary: Create new wallet
       description: To create a new wallet, a json object must be sent in the request.
@@ -354,8 +305,6 @@ components:
       properties:
         username:
           type: string
-        WalletResponseDto:
-          $ref: '#/components/schemas/WalletResponseDto'
       x-examples:
         example-1:
           username: user@exadel.com

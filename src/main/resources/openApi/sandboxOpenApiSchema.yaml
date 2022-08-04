@@ -55,7 +55,7 @@ paths:
         '201':
           description: Returns the HttpStatus 201 and id of the created wallet and means the successful creation of a new wallet
           content:
-            long:
+            application/json:
               schema:
                 type: integer
                 format: int64

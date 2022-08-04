@@ -6,6 +6,9 @@ info:
 tags:
   - name: User Management
   - name: WalletController
+  - name: Transactions
+  - name: Incomes
+  - name: Expenses
 paths:
   /users/login:
     post:
@@ -93,10 +96,10 @@ paths:
           $ref: '#/components/responses/Error'
         '500':
           $ref: '#/components/responses/Error'
-  '/wallets/{walletId}':
+  /wallets/{walletId}:
     get:
       summary: Get wallet by Id
-      description: Method for getting a wallet by id. Returns the user's wallet and recent transactions
+      description: Method for getting a wallet by id. Returns the user's wallet
       tags:
         - WalletController
       operationId: getWalletById
@@ -190,6 +193,447 @@ paths:
           $ref: '#/components/responses/Error'
         '500':
           $ref: '#/components/responses/Error'
+  /transactions:
+    get:
+      summary: Get recent transactions for all or be
+      description: Returns an array of recent transactions (income and expence)
+      tags:
+        - Transactions
+      operationId: getTransactions
+      parameters:
+        - name: walletId
+          schema:
+           type: integer
+           format: int64
+           example: -1
+          in: query
+          description: if walletId= -1 then you will take transactions from all
+                       wallets, else only by number of wallet
+          required: true
+        - name: page
+          schema:
+            type: integer
+            format: int64
+            example: 1
+          in: query
+          description: Number of page
+          required: true
+        - name: size
+          schema:
+            type: integer
+            format: int64
+            example: 10
+          in: query
+          description: Quantity of transactions, which will be show on 1 page
+      responses:
+        '200':
+          description: Returns a json object with an array of recent transactions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TansactionResponseDto'
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '500':
+          $ref: '#/components/responses/Error'
+  /incomes:
+    get:
+      summary: Get incomes transactions
+      description: Returns an array of recent income transactions
+      tags:
+        - Incomes
+      operationId: getIncomes
+      parameters:
+        - name: filterBY
+          schema:
+            type: string
+            enum: [ noFilter, wallet, date, category ]
+            default: "noFilter"
+          in: query
+          description: On main income page we haven't filter.
+                       If you need to select the desired option
+          required: true
+        - name: sortBY
+          schema:
+            type: string
+            enum: [ dateDesc, dateAsc, amountDesc, amountAsc ]
+            default: "dateDesc"
+          in: query
+          description: On main income page we have default sorting parametr.
+          required: true
+        - name: page
+          schema:
+            type: integer
+            format: int64
+            example: 1
+          in: query
+          description: Number of page
+          required: true
+        - name: size
+          schema:
+            type: integer
+            format: int64
+            example: 10
+          in: query
+          description: Quantity of incomes, which will be show on 1 page
+      responses:
+        '200':
+          description: Returns a json object with an array of recent transactions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IncomeResponseDto'
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '500':
+          $ref: '#/components/responses/Error'
+    post:
+      summary: Create incomes transactions
+      description: To create a new income, a json object must be sent in the request.
+      tags:
+        - Incomes
+      operationId: createIncomes
+      requestBody:
+        description: To create a income, you need to send an object in json format.
+                      If the operation is successful, Http status 201 and id returned
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IncomeRequestDto'
+      responses:
+        '201':
+          description: Returns the HttpStatus 201 and id of the created wallet
+                        and means the successful creation of a new wallet
+          content:
+            long:
+              schema:
+                type: integer
+                format: int64
+                example: 1
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '500':
+          $ref: '#/components/responses/Error'
+  /incomes/{incomeId}:
+    get:
+      summary: Get income by Id
+      description: Method for getting a income by id. Returns income object
+      tags:
+        - Incomes
+      operationId: getIncomeById
+      parameters:
+        - name: incomeId
+          in: path
+          required: true
+          description: 'Receive a income, you need
+                       to send the income id as a url parameter'
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Returns income by id that means successful receipt of data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncomeResponseDto'
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '500':
+          $ref: '#/components/responses/Error'
+    put:
+      summary: Update income by Id
+      description: To update the income, you need to send a json object. Returns the updated income
+      tags:
+        - Incomes
+      operationId: updateIncomeById
+      parameters:
+        - name: incomeId
+          in: path
+          required: true
+          description: 'To update income, you need to send the income id as a url parameter'
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description:  To update a income,  you need to send income object in json format with fields
+                      (if the field was not updated, send the old data).
+                       If the operation is successful, Http status 200 and updated income by id  are returned'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IncomeRequestDto'
+      responses:
+        '200':
+          description: Returns updated income by id and current transactions it means successful data update
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncomeResponseDto'
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '500':
+          $ref: '#/components/responses/Error'
+    delete:
+      summary: Delete income by Id
+      description: Method for deleting income by id. Returns HttpStatus 204 with no content
+      tags:
+        - Incomes
+      operationId: deleteIncomeById
+      parameters:
+        - name: incomeId
+          in: path
+          required: true
+          description: 'To receive a income, you need to send the income id as a url parameter'
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Returns http status "No content" which means successful deletion of the income
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '500':
+          $ref: '#/components/responses/Error'
+  /expenses:
+    get:
+      summary: Get expense transactions
+      description: Returns an array of recent expense
+      tags:
+        - Expenses
+      operationId: getExpense
+      parameters:
+        - name: filterBY
+          schema:
+            type: string
+            enum: [ noFilter, wallet, date, category, payer ]
+            default: "noFilter"
+          in: query
+          description: On main expense page we haven't filter.
+            If you need to select the desired option
+          required: true
+        - name: sortBY
+          schema:
+            type: string
+            enum: [ dateDesc, dateAsc, amountDesc, amountAsc ]
+            default: "dateDesc"
+          in: query
+          description: On main expense page we have default sorting parametr.
+          required: true
+        - name: page
+          schema:
+            type: integer
+            format: int64
+            example: 1
+          in: query
+          description: Number of page
+          required: true
+        - name: size
+          schema:
+            type: integer
+            format: int64
+            example: 10
+          in: query
+          description: Quantity of expense, which will be show on 1 page
+      responses:
+        '200':
+          description: Returns a json object with an array of recent expense transactions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IncomeResponseDto'
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '500':
+          $ref: '#/components/responses/Error'
+    post:
+      summary: Create expense transactions
+      description: To create a new expense, a json object must be sent in the request.
+      tags:
+        - Expenses
+      operationId: createExpense
+      requestBody:
+        description: To create a expense, you need to send an object in json format.
+          If the operation is successful, Http status 201 and id returned
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpenseRequestDto'
+      responses:
+        '201':
+          description: Returns the HttpStatus 201 and id of the created wallet
+            and means the successful creation of a new wallet
+          content:
+            long:
+              schema:
+                type: integer
+                format: int64
+                example: 1
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '500':
+          $ref: '#/components/responses/Error'
+  /expenses/{expenseId}:
+      get:
+        summary: Get expense by Id
+        description: Method for getting a expense by id. Returns expense object
+        tags:
+          - Expenses
+        operationId: getExpenseById
+        parameters:
+          - name: expenseId
+            in: path
+            required: true
+            description: Receive a expense, you need
+                         to send the expense id as a url parameter'
+            schema:
+              type: integer
+              format: int64
+        responses:
+          '200':
+            description: Returns expense by id that means successful receipt of data
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/IncomeResponseDto'
+          '400':
+            $ref: '#/components/responses/Error'
+          '401':
+            $ref: '#/components/responses/Error'
+          '403':
+            $ref: '#/components/responses/Error'
+          '404':
+            $ref: '#/components/responses/Error'
+          '500':
+            $ref: '#/components/responses/Error'
+      put:
+        summary: Update expense by Id
+        description: Update the expense, you need to send a json object.
+                     Returns the updated expense
+        tags:
+          - Expenses
+        operationId: updateExpenseById
+        parameters:
+          - name: expenseId
+            in: path
+            required: true
+            description: Update income, you need
+                         to send the expense id as a url parameter'
+            schema:
+              type: integer
+              format: int64
+        requestBody:
+          description: To update a expense,  you need to send expense object in json format with fields
+                       (if the field was not updated, send the old data).
+                        If the operation is successful, Http status 200 and updated expense by id  are returned'
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpenseRequestDto'
+        responses:
+          '200':
+            description: Returns updated expense by id and current transactions it means successful data update
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ExpenseResponseDto'
+          '400':
+            $ref: '#/components/responses/Error'
+          '401':
+            $ref: '#/components/responses/Error'
+          '403':
+            $ref: '#/components/responses/Error'
+          '404':
+            $ref: '#/components/responses/Error'
+          '500':
+            $ref: '#/components/responses/Error'
+      delete:
+        summary: Delete expense by Id
+        description: Method for deleting expense by id. Returns HttpStatus 204 with no content
+        tags:
+          - Expenses
+        operationId: deleteExpenseById
+        parameters:
+          - name: expenseId
+            in: path
+            required: true
+            description: 'To receive a expense, you need to send the expense id as a url parameter'
+            schema:
+              type: integer
+              format: int64
+        responses:
+          '204':
+            description: Returns http status "No content" which means successful deletion of the expense
+          '400':
+            $ref: '#/components/responses/Error'
+          '401':
+            $ref: '#/components/responses/Error'
+          '403':
+            $ref: '#/components/responses/Error'
+          '404':
+            $ref: '#/components/responses/Error'
+          '500':
+            $ref: '#/components/responses/Error'
+
+
 components:
   responses:
     Error:
@@ -255,6 +699,220 @@ components:
         balance:
           type: string
           example: '3000,00'
+    TansactionResponseDto:
+      description: This is  Transaction object
+      type: object
+      required:
+        - id
+        - type
+        - date
+        - category
+        - amount
+        - subcategory
+        - currency
+        - walletName
+      properties:
+        id:
+          description: Transaction's ID
+          type: integer
+          example: 25
+        type:
+          description: Transaction's type
+          type: string
+          enum: [incomes, expenses ]
+          example: "incomes"
+        date:
+          description: Transaction's data
+          type: string
+          example: "25.07.2022"
+        category:
+          description: Category of transactions
+          type: string
+          example: "Food"
+        subcategory:
+          description: Need only for expense transactions
+          type: string
+          example: "Gift"
+        amount:
+          description: Transaction's amount. We send integer where 1 = 1 cent.
+                       In example amount=200
+          type: integer
+          example: 20000
+        currency:
+          description: Transaction's currency
+          type: string
+          example: "USD"
+        walletName:
+          description: The wallet in which the transaction is located
+          type: string
+          example: "Salary"
+    IncomeRequestDto:
+      description: This is Income for Request which use in create and update
+      type: object
+      required:
+        - date
+        - category
+        - amount
+        - walletName
+        - notes
+      properties:
+        date:
+          description: Incomes's data
+          type: string
+          example: "25.07.2022"
+        category:
+          description: Category of Incomes
+          type: string
+          example: "Food"
+        amount:
+          description: Incomes's amount. We send integer where 1 = 1 cent.
+            In example amount=200
+          type: integer
+          example: 20000
+        walletName:
+          description: The wallet in which the income is located
+          type: string
+          example: "Salary"
+        notes:
+          description: Something about this incomes
+          type: string
+          example: "Something about this incomes"
+    IncomeResponseDto:
+      description: This is  Transaction object
+      type: object
+      required:
+        - id
+        - date
+        - category
+        - amount
+        - currency
+        - walletName
+        - notes
+      properties:
+        id:
+          description: Incomes's ID
+          type: integer
+          example: 25
+        date:
+          description: Incomes's data
+          type: string
+          example: "25.07.2022"
+        category:
+          description: Category of Incomes
+          type: string
+          example: "Food"
+        amount:
+          description: Incomes's amount. We send integer where 1 = 1 cent.
+                       In example amount=200
+          type: integer
+          example: 20000
+        currency:
+          description: Transaction's currency
+          type: string
+          example: "USD"
+        walletName:
+          description: The wallet in which the income is located
+          type: string
+          example: "Salary"
+        notes:
+          description: Something about this incomes
+          type: string
+          example: "Something about this incomes"
+    ExpenseRequestDto:
+      description: This is Expense for Request which use in create and update
+      type: object
+      required:
+        - date
+        - category
+        - subcategory
+        - amount
+        - walletName
+        - payer
+        - notes
+      properties:
+        date:
+          description: Expense's data
+          type: string
+          example: "25.07.2022"
+        category:
+          description: Category of Expense
+          type: string
+          example: "Food"
+        subcategory:
+          description: Subcategory of Expense
+          type: string
+          example: "Milk"
+        amount:
+          description: Expense's amount. We send integer where 1 = 1 cent.
+            In example amount=200
+          type: integer
+          example: 20000
+        walletName:
+          description: The wallet in which the income is located
+          type: string
+          example: "Salary"
+        payer:
+          description: Paied person
+          type: string
+          example: "Wife"
+        notes:
+          description: Something about this incomes
+          type: string
+          example: "Something about this incomes"
+    ExpenseResponseDto:
+      description: This is Expense object for response
+      type: object
+      required:
+        - id
+        - date
+        - category
+        - subcategory
+        - amount
+        - currency
+        - walletName
+        - payer
+        - notes
+      properties:
+        id:
+          description: Expense's ID
+          type: integer
+          example: 25
+        date:
+          description: Expense's data
+          type: string
+          example: "25.07.2022"
+        category:
+          description: Category of Expense
+          type: string
+          example: "Food"
+        subcategory:
+          description: Subcategory of Expense
+          type: string
+          example: "Milk"
+        amount:
+          description: Expense's amount. We send integer where 1 = 1 cent.
+            In example amount=200
+          type: integer
+          example: 20000
+        currency:
+          description: Transaction's currency
+          type: string
+          example: "USD"
+        walletName:
+          description: The wallet in which the income is located
+          type: string
+          example: "Salary"
+        payer:
+          description: Paied person
+          type: string
+          example: "Wife"
+        notes:
+          description: Something about this incomes
+          type: string
+          example: "Something about this incomes"
+
+
+
   securitySchemes:
     bearerAuth:
       type: http

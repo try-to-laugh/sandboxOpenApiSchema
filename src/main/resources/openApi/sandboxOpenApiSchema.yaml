@@ -205,7 +205,8 @@ paths:
           schema:
            type: integer
            format: int64
-           example: -1
+           example: 25
+           default: -1
           in: query
           description: if walletId= -1 then you will take transactions from all
                        wallets, else only by number of wallet
@@ -254,18 +255,17 @@ paths:
       parameters:
         - name: filterBY
           schema:
-            type: string
-            enum: [ noFilter, wallet, date, category ]
-            default: "noFilter"
+            type: array
+            items:
+              $ref: '#/components/schemas/FilterParametr'
+            default: ["noFilter"]
           in: query
           description: On main income page we haven't filter.
                        If you need to select the desired option
           required: true
         - name: sortBY
           schema:
-            type: string
-            enum: [ dateDesc, dateAsc, amountDesc, amountAsc ]
-            default: "dateDesc"
+            $ref: '#/components/schemas/SortParametr'
           in: query
           description: On main income page we have default sorting parametr.
           required: true
@@ -447,18 +447,17 @@ paths:
       parameters:
         - name: filterBY
           schema:
-            type: string
-            enum: [ noFilter, wallet, date, category, payer ]
-            default: "noFilter"
+            type: array
+            items:
+              $ref: '#/components/schemas/FilterParametr'
+            default: [ "noFilter" ]
           in: query
           description: On main expense page we haven't filter.
             If you need to select the desired option
           required: true
         - name: sortBY
           schema:
-            type: string
-            enum: [ dateDesc, dateAsc, amountDesc, amountAsc ]
-            default: "dateDesc"
+            $ref: '#/components/schemas/SortParametr'
           in: query
           description: On main expense page we have default sorting parametr.
           required: true
@@ -708,7 +707,6 @@ components:
         - date
         - category
         - amount
-        - subcategory
         - currency
         - walletName
       properties:
@@ -734,10 +732,9 @@ components:
           type: string
           example: "Gift"
         amount:
-          description: Transaction's amount. We send integer where 1 = 1 cent.
-                       In example amount=200
-          type: integer
-          example: 20000
+          description: Incomes's amount.
+          type: string
+          example: "200"
         currency:
           description: Transaction's currency
           type: string
@@ -765,10 +762,9 @@ components:
           type: string
           example: "Food"
         amount:
-          description: Incomes's amount. We send integer where 1 = 1 cent.
-            In example amount=200
-          type: integer
-          example: 20000
+          description: Incomes's amount.
+          type: string
+          example: "200"
         walletName:
           description: The wallet in which the income is located
           type: string
@@ -802,10 +798,9 @@ components:
           type: string
           example: "Food"
         amount:
-          description: Incomes's amount. We send integer where 1 = 1 cent.
-                       In example amount=200
-          type: integer
-          example: 20000
+          description: Incomes's amount.
+          type: string
+          example: "200"
         currency:
           description: Transaction's currency
           type: string
@@ -824,7 +819,6 @@ components:
       required:
         - date
         - category
-        - subcategory
         - amount
         - walletName
         - payer
@@ -843,10 +837,9 @@ components:
           type: string
           example: "Milk"
         amount:
-          description: Expense's amount. We send integer where 1 = 1 cent.
-            In example amount=200
-          type: integer
-          example: 20000
+          description: Expense's amount.
+          type: string
+          example: "200"
         walletName:
           description: The wallet in which the income is located
           type: string
@@ -866,7 +859,6 @@ components:
         - id
         - date
         - category
-        - subcategory
         - amount
         - currency
         - walletName
@@ -890,10 +882,9 @@ components:
           type: string
           example: "Milk"
         amount:
-          description: Expense's amount. We send integer where 1 = 1 cent.
-            In example amount=200
-          type: integer
-          example: 20000
+          description: Expense's amount.
+          type: string
+          example: "200"
         currency:
           description: Transaction's currency
           type: string
@@ -910,6 +901,13 @@ components:
           description: Something about this incomes
           type: string
           example: "Something about this incomes"
+    SortParametr:
+      description: This is  paremetr for sort data
+      enum: [ dateDesc, dateAsc, amountDesc, amountAsc ]
+      default: "dateDesc"
+    FilterParametr:
+      description: This is  paremetr for filter data
+      enum: [ noFilter, wallet, date, category, payer ]
 
 
 

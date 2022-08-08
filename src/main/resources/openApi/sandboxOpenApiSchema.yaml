@@ -245,7 +245,7 @@ paths:
           $ref: '#/components/responses/Error'
         '500':
           $ref: '#/components/responses/Error'
-  /incomes:
+  /transactions/incomes:
     get:
       summary: Get incomes transactions
       description: Returns an array of recent income transactions
@@ -337,7 +337,7 @@ paths:
           $ref: '#/components/responses/Error'
         '500':
           $ref: '#/components/responses/Error'
-  /incomes/{incomeId}:
+  /transactions/incomes/{incomeId}:
     get:
       summary: Get income by Id
       description: Method for getting a income by id. Returns income object
@@ -437,7 +437,7 @@ paths:
           $ref: '#/components/responses/Error'
         '500':
           $ref: '#/components/responses/Error'
-  /expenses:
+  /transactions/expenses:
     get:
       summary: Get expense transactions
       description: Returns an array of recent expense
@@ -529,7 +529,7 @@ paths:
           $ref: '#/components/responses/Error'
         '500':
           $ref: '#/components/responses/Error'
-  /expenses/{expenseId}:
+  /transactions/expenses/{expenseId}:
     get:
       summary: Get expense by Id
       description: Method for getting a expense by id. Returns expense object

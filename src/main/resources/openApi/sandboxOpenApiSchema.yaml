@@ -201,20 +201,18 @@ paths:
       parameters:
         - name: transactionsType
           schema:
-            enum: [ all, income, expence ]
-            default: all
+            $ref: '#/components/schemas/TransactionTypeParametr'
           in: query
           description: On main page we have all type of transactions.
-        - name: filterBY
+        - name: filterBy
           schema:
             type: array
             items:
               $ref: '#/components/schemas/FilterParametr'
-            default: [ "noFilter" ]
           in: query
           description: On main income page we haven't filter.
               If you need to select the desired option
-        - name: sortBY
+        - name: sortBy
           schema:
               $ref: '#/components/schemas/SortParametr'
           in: query
@@ -225,9 +223,8 @@ paths:
             type: integer
             format: int64
             example: 25
-            default: -1
           in: query
-          description: if walletId= -1 then you will take transactions from all
+          description: if you not sent walletId you take transactions from all
             wallets, else only by number of wallet
         - name: page
           schema:
@@ -278,7 +275,7 @@ paths:
           description: On main page we have all type of transactions.
           required: true
       requestBody:
-        description: To create a expense, you need to send an object in json format.
+        description: To create a transaction, you need to send an object in json format.
           If the operation is successful, Http status 201 and id returned
         required: true
         content:

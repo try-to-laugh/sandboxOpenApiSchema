@@ -201,20 +201,20 @@ paths:
       parameters:
         - name: transactionsType
           schema:
-            $ref: '#/components/schemas/TransactionTypeParametr'
+            $ref: '#/components/schemas/TransactionTypeParameter'
           in: query
           description: On main page we have all type of transactions.
         - name: filterBy
           schema:
             type: array
             items:
-              $ref: '#/components/schemas/FilterParametr'
+              $ref: '#/components/schemas/FilterParameter'
           in: query
           description: On main income page we haven't filter.
               If you need to select the desired option
         - name: sortBy
           schema:
-              $ref: '#/components/schemas/SortParametr'
+              $ref: '#/components/schemas/SortParameter'
           in: query
           description: On main income page we have default sorting parametr.
           required: true
@@ -270,7 +270,7 @@ paths:
       parameters:
         - name: transactionsType
           schema:
-             $ref: '#/components/schemas/TransactionTypeParametr'
+             $ref: '#/components/schemas/TransactionTypeParameter'
           in: query
           description: On main page we have all type of transactions.
           required: true
@@ -347,7 +347,7 @@ paths:
       parameters:
         - name: transactionsType
           schema:
-            $ref: '#/components/schemas/TransactionTypeParametr'
+            $ref: '#/components/schemas/TransactionTypeParameter'
           in: query
           description: On main page we have all type of transactions.
           required: true
@@ -498,7 +498,7 @@ components:
           description: Transaction's type
           type: object
           items:
-            $ref: '#/components/schemas/TransactionTypeParametr'
+            $ref: '#/components/schemas/TransactionTypeParameter'
         date:
           description: Transaction's data
           type: string
@@ -601,14 +601,14 @@ components:
           description: Something about this incomes
           type: string
           example: "Something about this incomes"
-    SortParametr:
+    SortParameter:
       description: This is  paremetr for sort data
       enum: [ dateDesc, dateAsc, amountDesc, amountAsc ]
       default: "dateDesc"
-    FilterParametr:
+    FilterParameter:
       description: This is  paremetr for filter data
       enum: [ wallet, date, category, payer ]
-    TransactionTypeParametr:
+    TransactionTypeParameter:
       description: This paremetr show kind of transactions you need
       enum: [ income, expence ]
   securitySchemes:

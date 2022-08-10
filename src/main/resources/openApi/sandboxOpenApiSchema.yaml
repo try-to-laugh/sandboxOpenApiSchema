@@ -46,15 +46,17 @@ paths:
       tags:
         - User Management
       operationId: logout
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: JWT
+          required: true
+          description: JWT Authorization header using the Bearer scheme
       responses:
         '200':
-          description: Successful logout (including invalid JWT token in HTTP Header)
-          headers:
-            Authorization:
-              schema:
-                type: string
-                example: Bearer 123
-              description: INVALID JWT Authorization header using the Bearer scheme forcing next request to reroute to login page
+          description: Successful logout
         '400':
           $ref: '#/components/responses/Error'
         '401':

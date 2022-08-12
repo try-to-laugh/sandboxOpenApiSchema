@@ -538,13 +538,13 @@ components:
       type: object
       required:
         - name
-        - default
+        - isDefault
         - currency
       properties:
         name:
           type: string
           example: USD wallet
-        default:
+        isDefault:
           type: boolean
           example: false
         currency:
@@ -555,7 +555,7 @@ components:
       required:
         - id
         - name
-        - default
+        - isDefault
         - currency
         - balance
       properties:
@@ -566,7 +566,7 @@ components:
         name:
           type: string
           example: My USD card
-        default:
+        isDefault:
           type: boolean
           example: false
         currency:

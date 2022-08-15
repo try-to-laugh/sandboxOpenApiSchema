@@ -576,7 +576,7 @@ components:
       type: object
       required:
         - id
-        - typeOf
+        - transactionType
         - date
         - category
         - amount
@@ -587,12 +587,12 @@ components:
           description: Transaction's ID
           type: integer
           example: 25
-        typeOf:
+        transactionType:
           $ref: '#/components/schemas/TransactionTypeParameter'
         date:
-          description: Transaction's data in ISO_LOCAL_DATE_TIME format
+          description: Transaction's data in "yyyy-MM-dd" format
           type: string
-          example: "2019-09-03T00:28:39.278"
+          example: "2019-09-25"
         category:
           description: Category of transactions
           type: string
@@ -625,18 +625,18 @@ components:
       description: This is  Transaction object
       type: object
       required:
-        - typeOf
+        - transactionType
         - date
         - category
         - amount
         - walletId
       properties:
-        typeOf:
+        transactionType:
           $ref: '#/components/schemas/TransactionTypeParameter'
         date:
-          description: Transaction's data in ISO_LOCAL_DATE_TIME format
+          description: Transaction's data in "yyyy-MM-dd" format
           type: string
-          example: "2019-09-03T00:28:39.278"
+          example: "2019-09-03"
         category:
           description: Category of transactions
           type: string

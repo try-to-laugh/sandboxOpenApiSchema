@@ -349,13 +349,6 @@ paths:
       tags:
         - Transactions
       operationId: createTransaction
-      parameters:
-        - name: transactionsType
-          schema:
-             $ref: '#/components/schemas/TransactionTypeParameter'
-          in: query
-          description: On main page we have all type of transactions.
-          required: true
       requestBody:
         description: To create a transaction, you need to send an object in json format.
           If the operation is successful, Http status 201 and id returned
@@ -425,12 +418,6 @@ paths:
         - Transactions
       operationId: updateTransactionById
       parameters:
-        - name: transactionsType
-          schema:
-            $ref: '#/components/schemas/TransactionTypeParameter'
-          in: query
-          description: On main page we have all type of transactions.
-          required: true
         - name: transactionId
           in: path
           required: true

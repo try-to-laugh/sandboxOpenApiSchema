@@ -663,11 +663,11 @@ components:
           example: "Something about this transaction"
     SortParameter:
       description: This is  paremetr for sort data
-      enum: [ dateDesc, dateAsc, amountDesc, amountAsc ]
+      enum: [ DATEDESC, DATEASC, AMOUNTDESC, AMOUNTASC ]
       default: "dateDesc"
     FilterParameter:
       description: This is  paremetr for filter data
-      enum: [ wallet, date, category, payer ]
+      enum: [ WALLET, DATE, CATEGORY, PAYER ]
     TransactionTypeParameter:
       description: This paremetr show kind of transactions you need
       enum: [ INCOME, EXPENSE ]

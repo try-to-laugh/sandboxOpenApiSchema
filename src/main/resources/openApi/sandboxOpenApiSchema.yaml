@@ -64,6 +64,28 @@ paths:
         '500':
           $ref: '#/components/responses/Error'
 
+
+  /users:
+    delete:
+      summary: Delete User
+      description: Method for deleting User. User entity is NOT deleted, only user data.
+      tags:
+        - User Management
+      operationId: deleteUser
+      responses:
+        '204':
+          description: Returns http status "No content" which means successful deletion of the user data
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '500':
+          $ref: '#/components/responses/Error'
+
   /users/{userId}:
     get:
       summary: Get User by Id
@@ -96,33 +118,7 @@ paths:
           $ref: '#/components/responses/Error'
         '500':
           $ref: '#/components/responses/Error'
-    delete:
-      summary: Delete User by Id
-      description: Method for deleting User data by id. User entity is NOT deleted, only user data.
-      tags:
-        - User Management
-      operationId: deleteUserById
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          description: 'User ID is required to delete User data'
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '204':
-          description: Returns http status "No content" which means successful deletion of the user data
-        '400':
-          $ref: '#/components/responses/Error'
-        '401':
-          $ref: '#/components/responses/Error'
-        '403':
-          $ref: '#/components/responses/Error'
-        '404':
-          $ref: '#/components/responses/Error'
-        '500':
-          $ref: '#/components/responses/Error'
+
 
   /wallets:
     post:

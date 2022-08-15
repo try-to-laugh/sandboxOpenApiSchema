@@ -367,9 +367,7 @@ paths:
         content:
           application/json:
             schema:
-              oneOf:
-                -  $ref: '#/components/schemas/IncomeRequestDto'
-                -  $ref: '#/components/schemas/ExpenseRequestDto'
+              $ref: '#/components/schemas/TransactionRequestDto'
       responses:
         '201':
           description: Returns the HttpStatus 201 and id of the created wallet
@@ -452,9 +450,7 @@ paths:
         content:
           application/json:
             schema:
-              oneOf:
-              - $ref: '#/components/schemas/IncomeRequestDto'
-              - $ref: '#/components/schemas/ExpenseRequestDto'
+              $ref: '#/components/schemas/TransactionRequestDto'
       responses:
         '200':
           description: Returns updated income by id and current transactions it means successful data update
@@ -580,7 +576,7 @@ components:
       type: object
       required:
         - id
-        - type
+        - typeOf
         - date
         - category
         - amount
@@ -591,15 +587,12 @@ components:
           description: Transaction's ID
           type: integer
           example: 25
-        type:
-          description: Transaction's type
-          type: object
-          items:
-            $ref: '#/components/schemas/TransactionTypeParameter'
+        typeOf:
+          $ref: '#/components/schemas/TransactionTypeParameter'
         date:
-          description: Transaction's data
+          description: Transaction's data in ISO_LOCAL_DATE_TIME format
           type: string
-          example: "25.07.2022"
+          example: "2019-09-03T00:28:39.278"
         category:
           description: Category of transactions
           type: string
@@ -628,68 +621,38 @@ components:
           description: Something about this incomes
           type: string
           example: "Something about this transaction"
-    IncomeRequestDto:
-      description: This is Income for Request which use in create and update
+    TransactionRequestDto:
+      description: This is  Transaction object
       type: object
       required:
+        - typeOf
         - date
         - category
         - amount
-        - walletName
-        - notes
+        - walletId
       properties:
+        typeOf:
+          $ref: '#/components/schemas/TransactionTypeParameter'
         date:
-          description: Incomes's data
+          description: Transaction's data in ISO_LOCAL_DATE_TIME format
           type: string
-          example: "25.07.2022"
+          example: "2019-09-03T00:28:39.278"
         category:
-          description: Category of Incomes
+          description: Category of transactions
           type: string
           example: "Food"
+        subcategory:
+          description: Need only for expense transactions
+          type: string
+          example: "Milk"
         amount:
           description: Incomes's amount.
           type: string
           example: "200"
-        walletName:
-          description: The wallet in which the income is located
-          type: string
-          example: "Salary"
-        notes:
-          description: Something about this incomes
-          type: string
-          example: "Something about this incomes"
-    ExpenseRequestDto:
-      description: This is Expense for Request which use in create and update
-      type: object
-      required:
-        - date
-        - category
-        - subcategory
-        - amount
-        - walletName
-        - payer
-        - notes
-      properties:
-        date:
-          description: Expense's data
-          type: string
-          example: "25.07.2022"
-        category:
-          description: Category of Expense
-          type: string
-          example: "Food"
-        subcategory:
-          description: Subcategory of Expense
-          type: string
-          example: "Milk"
-        amount:
-          description: Expense's amount.
-          type: string
-          example: "200"
-        walletName:
-          description: The wallet in which the income is located
-          type: string
-          example: "Salary"
+        walletId:
+          type: integer
+          format: int64
+          example: 1
         payer:
           description: Paied person
           type: string
@@ -697,7 +660,7 @@ components:
         notes:
           description: Something about this incomes
           type: string
-          example: "Something about this incomes"
+          example: "Something about this transaction"
     SortParameter:
       description: This is  paremetr for sort data
       enum: [ dateDesc, dateAsc, amountDesc, amountAsc ]
@@ -707,7 +670,7 @@ components:
       enum: [ wallet, date, category, payer ]
     TransactionTypeParameter:
       description: This paremetr show kind of transactions you need
-      enum: [ income, expence ]
+      enum: [ INCOME, EXPENSE ]
   securitySchemes:
     bearerAuth:
       type: http

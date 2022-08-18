@@ -7,6 +7,7 @@ tags:
   - name: User Management
   - name: WalletController
   - name: Transactions
+  - name: Categories
 paths:
   /users/registration:
     post:
@@ -69,7 +70,6 @@ paths:
         '500':
           $ref: '#/components/responses/Error'
       security: []
-
   /users/logout:
     get:
       summary: User logout with JWT de-activation
@@ -94,8 +94,6 @@ paths:
           $ref: '#/components/responses/Error'
         '500':
           $ref: '#/components/responses/Error'
-
-
   /users:
     delete:
       summary: Delete User
@@ -116,7 +114,6 @@ paths:
           $ref: '#/components/responses/Error'
         '500':
           $ref: '#/components/responses/Error'
-
   /users/{userId}:
     get:
       summary: Get User by Id
@@ -128,7 +125,7 @@ paths:
         - name: userId
           in: path
           required: true
-          description: 'User ID is required to obtain User data'
+          description: User ID is required to obtain User data
           schema:
             type: integer
             format: int64
@@ -149,14 +146,12 @@ paths:
           $ref: '#/components/responses/Error'
         '500':
           $ref: '#/components/responses/Error'
-
-
   /wallets:
     post:
       summary: Create new wallet
       description: To create a new wallet, a json object must be sent in the request.
       requestBody:
-        description: 'To create a user, you need to send an object in json format. If the operation is successful, Http status 201 and id returned'
+        description: To create a user, you need to send an object in json format. If the operation is successful, Http status 201 and id returned
         required: true
         content:
           application/json:
@@ -218,7 +213,7 @@ paths:
         - name: walletId
           in: path
           required: true
-          description: 'To receive a wallet, you need to send the wallet id as a url parameter'
+          description: To receive a wallet, you need to send the wallet id as a url parameter
           schema:
             type: integer
             format: int64
@@ -241,7 +236,7 @@ paths:
           $ref: '#/components/responses/Error'
     put:
       summary: Update wallet by Id
-      description: To update the wallet, you need to send a json object. Returns the updated user's wallet
+      description: To update the wallet, you need to send a json object. Returns the updated user''s wallet
       tags:
         - WalletController
       operationId: updateWalletById
@@ -249,12 +244,12 @@ paths:
         - name: walletId
           in: path
           required: true
-          description: 'To update wallet, you need to send the wallet id as a url parameter'
+          description: To update wallet, you need to send the wallet id as a url parameter
           schema:
             type: integer
             format: int64
       requestBody:
-        description: 'To update a user,  you need to send wallet object in json format with fields filled in (if the field was not updated, send the old data). If the operation is successful, Http status 200 and the id of the created wallet are returned'
+        description: To update a user,  you need to send wallet object in json format with fields filled in (if the field was not updated, send the old data). If the operation is successful, Http status 200 and the id of the created wallet are returned
         required: true
         content:
           application/json:
@@ -287,7 +282,7 @@ paths:
         - name: walletId
           in: path
           required: true
-          description: 'To delete a wallet, you need to send the wallet id as a url parameter'
+          description: To delete a wallet, you need to send the wallet id as a url parameter
           schema:
             type: integer
             format: int64
@@ -323,11 +318,10 @@ paths:
             items:
               $ref: '#/components/schemas/FilterParameter'
           in: query
-          description: On main income page we haven't filter.
-              If you need to select the desired option
+          description: On main income page we haven't filter. If you need to select the desired option
         - name: sortBy
           schema:
-              $ref: '#/components/schemas/SortParameter'
+            $ref: '#/components/schemas/SortParameter'
           in: query
           description: On main income page we have default sorting parametr.
           required: true
@@ -337,8 +331,7 @@ paths:
             format: int64
             example: 25
           in: query
-          description: if you not sent walletId you take transactions from all
-            wallets, else only by number of wallet
+          description: if you not sent walletId you take transactions from all wallets, else only by number of wallet
         - name: page
           schema:
             type: integer
@@ -381,8 +374,7 @@ paths:
         - Transactions
       operationId: createTransaction
       requestBody:
-        description: To create a transaction, you need to send an object in json format.
-          If the operation is successful, Http status 201 and id returned
+        description: To create a transaction, you need to send an object in json format. If the operation is successful, Http status 201 and id returned
         required: true
         content:
           application/json:
@@ -390,8 +382,7 @@ paths:
               $ref: '#/components/schemas/TransactionRequestDto'
       responses:
         '201':
-          description: Returns the HttpStatus 201 and id of the created wallet
-            and means the successful creation of a new wallet
+          description: Returns the HttpStatus 201 and id of the created wallet and means the successful creation of a new wallet
           content:
             application/json:
               schema:
@@ -419,8 +410,7 @@ paths:
         - name: transactionId
           in: path
           required: true
-          description: 'Receive a transaction, you need
-                       to send the transaction id as a url parameter'
+          description: Receive a transaction, you need to send the transaction id as a url parameter
           schema:
             type: integer
             format: int64
@@ -443,8 +433,7 @@ paths:
           $ref: '#/components/responses/Error'
     put:
       summary: Update transaction by Id
-      description: To update the transaction, you need to send a json object.
-                   Returns the updated transaction
+      description: To update the transaction, you need to send a json object. Returns the updated transaction
       tags:
         - Transactions
       operationId: updateTransactionById
@@ -452,14 +441,12 @@ paths:
         - name: transactionId
           in: path
           required: true
-          description: 'To update income, you need to send the income id as a url parameter'
+          description: To update income, you need to send the income id as a url parameter
           schema:
             type: integer
             format: int64
       requestBody:
-        description:  To update a income,  you need to send income object in json format with fields
-          (if the field was not updated, send the old data).
-          If the operation is successful, Http status 200 and updated income by id  are returned'
+        description: To update a income,  you need to send income object in json format with fields (if the field was not updated, send the old data). If the operation is successful, Http status 200 and updated income by id  are returned''
         required: true
         content:
           application/json:
@@ -471,7 +458,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/TransactionResponseDto'
+                $ref: '#/components/schemas/TransactionResponseDto'
         '400':
           $ref: '#/components/responses/Error'
         '401':
@@ -492,13 +479,172 @@ paths:
         - name: transactionId
           in: path
           required: true
-          description: 'To receive a transaction, you need to send the transaction id as a url parameter'
+          description: To receive a transaction, you need to send the transaction id as a url parameter
           schema:
             type: integer
             format: int64
       responses:
         '204':
           description: Returns http status "No content" which means successful deletion of the transaction
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '500':
+          $ref: '#/components/responses/Error'
+  /categories:
+    get:
+      summary: Get all categories
+      description: Returns an array of categories owned by an authenticated user
+      tags:
+        - Categories
+      operationId: getAllCategories
+      parameters:
+        - name: categoryType
+          schema:
+            $ref: '#/components/schemas/TransactionTypeParameter'
+          in: query
+          description: On main page we have all type of transactions.
+      responses:
+        '200':
+          description: Returns a json object with an array of categories that means successful receipt of data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryResponseDto'
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '500':
+          $ref: '#/components/responses/Error'
+    post:
+      summary: Create category
+      description: To create the category, you need to send a json object
+      tags:
+        - Categories
+      operationId: createCategory
+      requestBody:
+        description: To create a category, you need to send category object in json format with fields filled in. If the operation is successful, Http status 200
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryRequestDto'
+      responses:
+        '201':
+          description: Returns the HttpStatus 201 and id of the created category and means the successful creation of a new category
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int64
+                example: 1
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '500':
+          $ref: '#/components/responses/Error'
+  /categories/{categoryId}:
+    get:
+      summary: Get category by Id
+      description: Method for getting a category by id.
+      tags:
+        - Categories
+      operationId: getCategoryById
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          description: To receive a category, you need to send the category id as a url parameter
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Returns category by id that means successful receipt of data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryResponseDto'
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '500':
+          $ref: '#/components/responses/Error'
+    put:
+      summary: Update category by Id
+      description: To update the category, you need to send a json object. Returns the updated user's category
+      tags:
+        - Categories
+      operationId: updateCategoryById
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          description: To update category, you need to send the category id as a url parameter
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: To update a category, you need to send category object in json format with fields filled in (if the field was not updated, send the old data). If the operation is successful, Http status 200
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryRequestDto'
+      responses:
+        '200':
+          description: Returns updated category by id it means successful data update
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryResponseDto'
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+        '500':
+          $ref: '#/components/responses/Error'
+    delete:
+      summary: Delete category by Id
+      description: Method for deleting category by id. Returns HttpStatus 204 with no content
+      tags:
+        - Categories
+      operationId: deleteCategoryById
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          description: To delete a category, you need to send the category id as a url parameter
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Returns http status "No content" which means successful deletion of the category
         '400':
           $ref: '#/components/responses/Error'
         '401':
@@ -519,7 +665,6 @@ components:
             type: string
             example: User not authenticated
   schemas:
-
     UserLoginDto:
       type: object
       properties:
@@ -534,7 +679,6 @@ components:
         example-1:
           username: user@exadel.com
           password: User1234
-
     UserResponseDto:
       type: object
       properties:
@@ -543,7 +687,6 @@ components:
       x-examples:
         example-1:
           username: user@exadel.com
-
     WalletRequestDto:
       type: object
       required:
@@ -606,35 +749,33 @@ components:
         date:
           description: Transaction's data in "yyyy-MM-dd" format
           type: string
-          example: "2019-09-25"
+          example: '2019-09-25'
         category:
-          description: Category of transactions
-          type: string
-          example: "Food"
+          $ref: '#/components/schemas/CategoryResponseDto'
         subcategory:
           description: Need only for expense transactions
           type: string
-          example: "Gift"
+          example: Gift
         amount:
-          description: Incomes's amount.
+          description: Income amount.
           type: string
-          example: "200"
+          example: '200'
         currency:
           description: Transaction's currency
           type: string
-          example: "USD"
+          example: USD
         walletName:
           description: The wallet in which the transaction is located
           type: string
-          example: "Salary"
+          example: Salary
         payer:
           description: Paied person
           type: string
-          example: "Wife"
+          example: Wife
         notes:
           description: Something about this incomes
           type: string
-          example: "Something about this transaction"
+          example: Something about this transaction
     TransactionRequestDto:
       description: This is  Transaction object
       type: object
@@ -650,19 +791,17 @@ components:
         date:
           description: Transaction's data in "yyyy-MM-dd" format
           type: string
-          example: "2019-09-03"
+          example: '2019-09-03'
         category:
-          description: Category of transactions
-          type: string
-          example: "Food"
+          $ref: '#/components/schemas/CategoryRequestDto'
         subcategory:
           description: Need only for expense transactions
           type: string
-          example: "Milk"
+          example: Milk
         amount:
-          description: Incomes's amount.
+          description: Income amount.
           type: string
-          example: "200"
+          example: '200'
         walletId:
           type: integer
           format: int64
@@ -670,26 +809,74 @@ components:
         payer:
           description: Paied person
           type: string
-          example: "Wife"
+          example: Wife
         notes:
           description: Something about this incomes
           type: string
-          example: "Something about this transaction"
+          example: Something about this transaction
+    CategoryRequestDto:
+      description: Category of transactions
+      type: object
+      required:
+        - name
+        - color
+        - categoryType
+      properties:
+        name:
+          type: string
+          example: Food
+        color:
+          type: string
+          maxLength: 7
+          example: '#FF0000'
+        categoryType:
+          $ref: '#/components/schemas/TransactionTypeParameter'
+    CategoryResponseDto:
+      description: Category of transactions
+      type: object
+      required:
+        - id
+        - name
+        - color
+        - categoryType
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 4
+        name:
+          type: string
+          example: Food
+        color:
+          type: string
+          maxLength: 7
+          example: '#FF0000'
+        categoryType:
+          $ref: '#/components/schemas/TransactionTypeParameter'
     SortParameter:
-      description: This is  paremetr for sort data
-      enum: [ DATEDESC, DATEASC, AMOUNTDESC, AMOUNTASC ]
-      default: "dateDesc"
+      description: This is  parameter for sort data
+      enum:
+        - DATEDESC
+        - DATEASC
+        - AMOUNTDESC
+        - AMOUNTASC
+      default: DATEDESC
     FilterParameter:
-      description: This is  paremetr for filter data
-      enum: [ WALLET, DATE, CATEGORY, PAYER ]
+      description: This is  parameter for filter data
+      enum:
+        - WALLET
+        - DATE
+        - CATEGORY
+        - PAYER
     TransactionTypeParameter:
-      description: This paremetr show kind of transactions you need
-      enum: [ INCOME, EXPENSE ]
+      description: This parameter show kind of transactions you need
+      enum:
+        - INCOME
+        - EXPENSE
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       description: JWT Authorization header using the Bearer scheme
-
 security:
   - bearerAuth: []

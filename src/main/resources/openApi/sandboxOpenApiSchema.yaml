@@ -15,7 +15,7 @@ paths:
       description: As a User I want to to have a registration functionality
       tags:
         - User Management
-      operationId: login
+      operationId: registration
       requestBody:
         content:
           application/json:

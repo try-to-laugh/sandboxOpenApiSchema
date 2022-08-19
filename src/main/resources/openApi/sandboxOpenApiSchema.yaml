@@ -793,7 +793,7 @@ components:
           type: string
           example: '2019-09-03'
         category:
-          $ref: '#/components/schemas/CategoryRequestDto'
+          $ref: '#/components/schemas/CategoryResponseDto'
         subcategory:
           description: Need only for expense transactions
           type: string

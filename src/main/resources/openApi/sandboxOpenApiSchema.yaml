@@ -743,6 +743,7 @@ components:
         id:
           description: Transaction's ID
           type: integer
+          format: int64
           example: 25
         transactionType:
           $ref: '#/components/schemas/TransactionTypeParameter'

@@ -307,47 +307,37 @@ paths:
         - Transactions
       operationId: getTransactions
       parameters:
-        - name: transactionsType
-          schema:
-            $ref: '#/components/schemas/TransactionTypeParameter'
-          in: query
-          description: On main page we have all type of transactions.
-        - name: filterBy
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/FilterParameter'
-          in: query
-          description: On main income page we haven't filter. If you need to select the desired option
-        - name: sortBy
-          schema:
-            $ref: '#/components/schemas/SortParameter'
-          in: query
-          description: On main income page we have default sorting parametr.
-          required: true
         - name: walletId
-          schema:
-            type: integer
-            format: int64
-            example: 25
-          in: query
-          description: if you not sent walletId you take transactions from all wallets, else only by number of wallet
-        - name: page
           schema:
             type: integer
             format: int64
             example: 1
           in: query
-          description: Number of page
-          required: true
-        - name: size
+          description: (Optional, default value "-1") If walletID is given - return list of wallet specific transactions. Otherwise - all transactions (pageable) for current user.
+          required: false
+        - name: pageNumber
+          schema:
+            type: integer
+            format: int64
+            example: 1
+          in: query
+          description: (Optional, default value - "0", shows the very first page) Page to be displayed
+          required: false
+        - name: pageSize
           schema:
             type: integer
             format: int64
             example: 10
           in: query
-          description: Quantity of transactions, which will be show on 1 page
-          required: true
+          description: (Optional, default - "10"). Number of transaction per page
+          required: false
+        - name: sortBy
+          schema:
+            type: string
+            example: payer
+          in: query
+          description: (Optional) Sort transactions inside the wallet by given field name. Available "id", "name", "currency", "usedAt", "profileId", "amount"
+          required: false
       responses:
         '200':
           description: Returns a json object with an array of recent transactions
